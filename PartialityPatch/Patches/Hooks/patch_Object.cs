@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 using Partiality;
 
 namespace UnityEngine.mm.Patches.Hooks {
-    [MonoMod.MonoModPatch("global:UnityEngine.Object")]
-    class patch_Object {
+    [MonoMod.MonoModPatch( "global::UnityEngine.Object" )]
+    class patch_Object: Object {
 
-        public extern void orig_ctor_Object();
+        [MonoMod.MonoModIgnore]
+        public static int OffsetOfInstanceIDInCPlusPlusObject;
+
         [MonoMod.MonoModConstructor]
-        public void ctor_Object() {
-            orig_ctor_Object();
+        public static void cctor_Object() {
+            OffsetOfInstanceIDInCPlusPlusObject = -1;
 
-            Debug.Log("Let's hook some code!");
+            Debug.Log( "Let's hook some code!" );
             PartialityManager.CreateInstance();
         }
     }
