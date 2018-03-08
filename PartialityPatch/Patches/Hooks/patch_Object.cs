@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,12 @@ namespace UnityEngine.mm.Patches.Hooks {
             OffsetOfInstanceIDInCPlusPlusObject = -1;
 
             Debug.Log( "Let's hook some code!" );
-            PartialityManager.CreateInstance();
+            try {
+                PartialityManager.CreateInstance();
+            } catch( System.Exception e ) {
+                Debug.LogError(e);
+                File.WriteAllText( Application.dataPath + "/errorPartiality.txt", e.ToString() );
+            }
         }
     }
 }
